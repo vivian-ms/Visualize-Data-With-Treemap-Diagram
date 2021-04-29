@@ -30,6 +30,15 @@ window.onload = () => {
       updateInfo();
     });
   });
+
+  Promise.all(datasets.map(d => fetch(d.url)))
+         .then(responses => Promise.all(responses.map(response => response.json())))
+         .then(data => {
+           console.log(data);
+         })
+         .catch(err => {
+           console.log(`ERROR: ${err}`);
+         });
 };  // End window.onload()
 
 
