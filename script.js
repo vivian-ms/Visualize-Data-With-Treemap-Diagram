@@ -19,6 +19,8 @@ const datasets = [
   }
 ];
 var index = 0;
+const w = 800;
+const h = 300;
 
 
 window.onload = () => {
@@ -35,6 +37,7 @@ window.onload = () => {
          .then(responses => Promise.all(responses.map(response => response.json())))
          .then(data => {
            console.log(data);
+           createCanvas();
          })
          .catch(err => {
            console.log(`ERROR: ${err}`);
@@ -48,3 +51,12 @@ function updateInfo() {
   });
   document.querySelector('#description').innerHTML = datasets[index].description;
 }  // End updateInfo()
+
+
+function createCanvas() {
+  d3.select('#treemap_container')
+    .append('svg')
+    .attr('id', 'treemap')
+    .attr('viewBox', `0 0 ${w} ${h}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+}  // End createCanvas()
