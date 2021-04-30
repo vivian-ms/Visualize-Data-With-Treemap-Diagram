@@ -69,4 +69,11 @@ function drawTreemap(data) {
   let root = d3.hierarchy(data, d => d.children)
                .sum(d => d.value)
                .sort((a, b) => b.value - a.value);
+
+   let treemap = d3.treemap()
+                      .size([w, h]);
+
+   treemap(root);
+
+   console.log(root.leaves());
 }  // End drawTreemap()
