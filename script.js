@@ -75,5 +75,21 @@ function drawTreemap(data) {
 
    treemap(root);
 
-   console.log(root.leaves());
+   let tiles = d3.select('#treemap').selectAll('g')
+                 .data(root.leaves())
+                 .enter()
+                 .append('g')
+                 .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
+   tiles.append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
+        .attr('fill', 'none')
+        .attr('stroke', 'black')
+        .attr('stroke-width', '0.01rem')
+        .attr('data-name', d => d.data.name)
+        .attr('data-category', d => d.data.category)
+        .attr('data-value', d => d.data.value)
+        .classed('tile', true);
 }  // End drawTreemap()
