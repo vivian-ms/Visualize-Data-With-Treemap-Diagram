@@ -26,18 +26,18 @@ const h = 300;
 window.onload = () => {
   updateInfo();
 
-  document.querySelectorAll('.navbar a').forEach(elem => {
-    elem.addEventListener('click', evt => {
-      index = evt.target.getAttribute('data-index');
-      updateInfo();
-    });
-  });
-
   Promise.all(datasets.map(d => fetch(d.url)))
          .then(responses => Promise.all(responses.map(response => response.json())))
          .then(data => {
-           console.log(data);
-           createCanvas();
+           createCanvas(data[index]);
+
+           document.querySelectorAll('.navbar a').forEach(elem => {
+             elem.addEventListener('click', evt => {
+               index = evt.target.getAttribute('data-index');
+               updateInfo();
+               createCanvas(data[index]);
+             });
+           });
          })
          .catch(err => {
            console.log(`ERROR: ${err}`);
@@ -50,13 +50,23 @@ function updateInfo() {
     elm.innerHTML = datasets[index].name;
   });
   document.querySelector('#description').innerHTML = datasets[index].description;
+  document.querySelector('#treemap_container').innerHTML = '';
 }  // End updateInfo()
 
 
-function createCanvas() {
+function createCanvas(data) {
   d3.select('#treemap_container')
     .append('svg')
     .attr('id', 'treemap')
     .attr('viewBox', `0 0 ${w} ${h}`)
     .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  drawTreemap(data);
 }  // End createCanvas()
+
+
+function drawTreemap(data) {
+  let root = d3.hierarchy(data, d => d.children)
+               .sum(d => d.value)
+               .sort((a, b) => b.value - a.value);
+}  // End drawTreemap()
