@@ -1,0 +1,44 @@
+body {
+  background: lightgrey;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#title, #description, .navbar {
+  text-align: center;
+}
+
+#title {
+  font-family: 'Oswald', sans-serif;
+  font-variant: small-caps;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0 10px;
+}
+
+.navbar li {
+  display: inline-block;
+  padding: 0 2rem;
+}
+
+.navbar a {
+  color: blue;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+svg {
+  border: 1px solid white;
+}
+
+#treemap_container {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+footer {
+  padding: 5px;
+  font-size: 0.75rem;
+}
