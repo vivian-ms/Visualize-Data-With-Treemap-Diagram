@@ -33,9 +33,33 @@ svg {
 }
 
 #treemap_container {
+  position: relative;
   width: 95%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.tile {
+  stroke: black;
+}
+
+.tile-text {
+  font-size: 0.4rem;
+}
+
+#tooltip {
+  position: absolute;
+  pointer-events: none;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px black;
+  line-height: 1.5rem;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+}
+
+#tooltip h4, #tooltip p {
+  margin: 0.5rem;
 }
 
 footer {
