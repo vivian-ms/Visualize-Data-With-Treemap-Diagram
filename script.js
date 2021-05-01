@@ -21,6 +21,7 @@ const datasets = [
 var index = 0;
 const w = 800;
 const h = 300;
+const colors = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f'];  // Source: https://colorbrewer2.org/?type=qualitative&scheme=Set3&n=12
 
 
 window.onload = () => {
@@ -66,6 +67,17 @@ function createCanvas(data) {
 
 
 function drawTreemap(data) {
+  let category_array = data.children.map(child => child.name);
+  let color_array = [];
+
+  for (let i = 0; i < category_array.length; i++) {
+    color_array.push(colors[i % colors.length]);
+  }
+
+  let colorScale = d3.scaleOrdinal()
+                     .domain(category_array)
+                     .range(color_array);
+
   let root = d3.hierarchy(data, d => d.children)
                .sum(d => d.value)
                .sort((a, b) => b.value - a.value);
@@ -85,7 +97,7 @@ function drawTreemap(data) {
         .attr('y', 0)
         .attr('width', d => d.x1 - d.x0)
         .attr('height', d => d.y1 - d.y0)
-        .attr('fill', 'none')
+        .attr('fill', d => colorScale(d.data.category))
         .attr('stroke', 'black')
         .attr('stroke-width', '0.01rem')
         .attr('data-name', d => d.data.name)
