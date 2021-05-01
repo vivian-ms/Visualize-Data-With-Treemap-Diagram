@@ -82,26 +82,36 @@ function drawTreemap(data) {
                .sum(d => d.value)
                .sort((a, b) => b.value - a.value);
 
-   let treemap = d3.treemap()
-                      .size([w, h]);
+  let treemap = d3.treemap()
+                    .size([w, h]);
 
-   treemap(root);
+  treemap(root);
 
-   let tiles = d3.select('#treemap').selectAll('g')
-                 .data(root.leaves())
-                 .enter()
-                 .append('g')
-                 .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
-   tiles.append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', d => d.x1 - d.x0)
-        .attr('height', d => d.y1 - d.y0)
-        .attr('fill', d => colorScale(d.data.category))
-        .attr('stroke', 'black')
-        .attr('stroke-width', '0.01rem')
-        .attr('data-name', d => d.data.name)
-        .attr('data-category', d => d.data.category)
-        .attr('data-value', d => d.data.value)
-        .classed('tile', true);
+  let tiles = d3.select('#treemap').selectAll('g')
+               .data(root.leaves())
+               .enter()
+               .append('g')
+               .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
+  tiles.append('rect')
+       .attr('x', 0)
+       .attr('y', 0)
+       .attr('width', d => d.x1 - d.x0)
+       .attr('height', d => d.y1 - d.y0)
+       .attr('fill', d => colorScale(d.data.category))
+       .attr('stroke', 'black')
+       .attr('stroke-width', '0.01rem')
+       .attr('data-name', d => d.data.name)
+       .attr('data-category', d => d.data.category)
+       .attr('data-value', d => d.data.value)
+       .classed('tile', true);
+  tiles.append('text')
+       .classed('tile-text', true)
+       .selectAll('tspan')
+       .data(d => (d.data.name).split(' '))
+       .enter()
+       .append('tspan')
+       .attr('x', 2)
+       .attr('y', (d, i) => i * 8 + 8)
+       .attr('font-size', '0.4rem')
+       .text(d => d);
 }  // End drawTreemap()
