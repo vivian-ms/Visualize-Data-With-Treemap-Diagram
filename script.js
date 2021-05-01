@@ -78,6 +78,11 @@ function drawTreemap(data) {
                      .domain(category_array)
                      .range(color_array);
 
+  let tooltip = d3.select('#treemap_container')
+                 .append('div')
+                 .attr('id', 'tooltip')
+                 .style('opacity', 0);
+
   let root = d3.hierarchy(data, d => d.children)
                .sum(d => d.value)
                .sort((a, b) => b.value - a.value);
@@ -91,14 +96,36 @@ function drawTreemap(data) {
                .data(root.leaves())
                .enter()
                .append('g')
-               .attr('transform', d => `translate(${d.x0}, ${d.y0})`);
+               .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
+               .on('mouseover', (evt, d) => {
+                 d3.select(evt.currentTarget.querySelector('rect')).transition()
+                   .duration(50)
+                   .attr('stroke-width', '0.1rem');
+                 tooltip.transition()
+                        .duration(50)
+                        .style('opacity', 1)
+                        .style('left', `${evt.pageX - 150}px`)
+                        .style('top', `${evt.pageY - 300}px`);
+                 tooltip.attr('data-value', d.data.value)
+                        .html(() => {
+                          let format = d3.format(',');
+                          return `<h4>${d.data.name}</h4> <p>${datasets[index].group}: ${d.data.category}</p> <p>Value: ${format(d.data.value)}</p>`;
+                        })
+               })
+               .on('mouseleave', (evt, d) => {
+                 d3.select(evt.currentTarget.querySelector('rect')).transition()
+                   .duration(50)
+                   .attr('stroke-width', '0.01rem');
+                 tooltip.transition()
+                        .duration(50)
+                        .style('opacity', 0);
+               });
   tiles.append('rect')
        .attr('x', 0)
        .attr('y', 0)
        .attr('width', d => d.x1 - d.x0)
        .attr('height', d => d.y1 - d.y0)
        .attr('fill', d => colorScale(d.data.category))
-       .attr('stroke', 'black')
        .attr('stroke-width', '0.01rem')
        .attr('data-name', d => d.data.name)
        .attr('data-category', d => d.data.category)
@@ -112,6 +139,5 @@ function drawTreemap(data) {
        .append('tspan')
        .attr('x', 2)
        .attr('y', (d, i) => i * 8 + 8)
-       .attr('font-size', '0.4rem')
        .text(d => d);
 }  // End drawTreemap()
