@@ -28,10 +28,6 @@ body {
   font-weight: bold;
 }
 
-svg {
-  border: 1px solid white;
-}
-
 #treemap_container {
   position: relative;
   width: 95%;
@@ -60,6 +56,22 @@ svg {
 
 #tooltip h4, #tooltip p {
   margin: 0.5rem;
+}
+
+#legend_container {
+  width: 50%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.legend-item {
+  stroke: black;
+  stroke-width: 0.1;
+}
+
+.legend-text {
+  font-size: 0.35rem;
 }
 
 footer {
